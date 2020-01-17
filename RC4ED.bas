@@ -54,7 +54,7 @@ Sub KSA(aubS() As UByte, ByVal sKey As String, ByVal uiKeyLength As UInteger)
     For i = 0 To 255
         j = (j + aubS(i) + CUByte(sKey[i mod uiKeyLength])) mod 256
 
-' exchange data
+' swap data
         Swap aubS(i), aubS(j)
     Next i
 End Sub
@@ -72,7 +72,7 @@ Sub PRGA(aubS() As UByte, aubKeyStream() As UByte, ByVal uiFileSize As UInteger)
 
         j = (j + aubS(i)) mod 256
 
-' exchange data
+' swap data
         Swap aubS(i), aubS(j)
 
         aubKeyStream(k) = aubS((aubS(i) + aubS(j)) mod 256)

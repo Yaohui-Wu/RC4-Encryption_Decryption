@@ -1,6 +1,6 @@
 ﻿=begin
-Usage (Encryption): ruby RC4ED plaintext.file ciphertext.file password
-Usage (Decryption): ruby RC4ED ciphertext.file plaintext.file password
+Usage (Encryption): ruby RC4ED.rb plaintext.file ciphertext.file password
+Usage (Decryption): ruby RC4ED.rb ciphertext.file plaintext.file password
 
 Algorithm:
     S=[];
@@ -52,6 +52,7 @@ def KSA(aS,sKey)
     (0...256).each do |i|
         j=(j+aS[i]+sKey[i%sKey.length].ord)%256;
 
+# swap data
         aS[i],aS[j]=aS[j],aS[i];
     end
 end
@@ -67,6 +68,7 @@ def PRGA(aS,aKeyStream,iPlaintextOrCiphertextLength)
 
         j=(j+aS[i])%256;
 
+# swap data
         aS[i],aS[j]=aS[j],aS[i];
 
         aKeyStream[k]=aS[(aS[i]+aS[j])%256];

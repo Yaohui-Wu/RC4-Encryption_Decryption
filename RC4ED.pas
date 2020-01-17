@@ -70,7 +70,7 @@ Var
 
     pbPlaintextOrCiphertext, pbKeyStream:PByte;
 
-// exchange data
+// swap data
 Procedure Swap(Var bSi:Byte; Var bSj:Byte);
 Var
     bTemp:Byte;

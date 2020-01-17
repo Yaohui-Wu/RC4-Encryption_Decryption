@@ -1,6 +1,6 @@
 =pod
-Usage (Encryption): perl RC4ED plaintext.file ciphertext.file password
-Usage (Decryption): perl RC4ED ciphertext.file plaintext.file password
+Usage (Encryption): perl RC4ED.pl plaintext.file ciphertext.file password
+Usage (Decryption): perl RC4ED.pl ciphertext.file plaintext.file password
 
 Algorithm:
     my($i,$j,$l,@S,@T);
@@ -63,7 +63,7 @@ sub KSA
     {
         $j=($j + $_[0][$i] + ord($aKey[$i%length($ARGV[2])]))%256;
 
-# exchange data
+# swap data
         ($_[0][$i],$_[0][$j])=($_[0][$j],$_[0][$i]);
     }
 }
@@ -83,7 +83,7 @@ sub PRGA
 
         $j=($j+$_[0][$i])%256;
 
-# exchange data
+# swap data
         ($_[0][$i],$_[0][$j])=($_[0][$j],$_[0][$i]);
 
         $_[1][$k]=$_[0][($_[0][$i]+$_[0][$j])%256];

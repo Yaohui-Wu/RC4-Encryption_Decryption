@@ -4,6 +4,7 @@ Usage (Decryption): java RC4ED ciphertext.file plaintext.file password
 
 Algorithm:
     byte[] S = new byte[256];
+
     byte[] T = new byte[256];
 
     swap(byte[] S, int i, int j)
@@ -72,18 +73,18 @@ public class RC4ED
             abS[i] = (byte)i;
         }
 
-        for(int j = 0, k = 0; k < 256; ++k)
+        for(int j = 0, i = 0; i < 256; ++i)
         {
-            j = j + abS[k] + abKey[k % abKey.length] & 255;
+            j = j + abS[i] + abKey[i % abKey.length] & 255;
 
-            Swap(abS, j, k);
+            Swap(abS, i, j);
         }
     }
 
 // pseudo random-number generation algorithm for producing key stream
-    private static void PRGA(byte[] abS, byte[] abKeyStream, int lFileSize)
+    private static void PRGA(byte[] abS, byte[] abKeyStream, int iFileSize)
     {
-        for(int i = 0, j = 0, k = 0; k < lFileSize; ++k)
+        for(int i = 0, j = 0, k = 0; k < iFileSize; ++k)
         {
             i = i + 1 & 255;
 
@@ -100,10 +101,10 @@ public class RC4ED
         File dPlaintextOrCiphertext = new File(args[0]);
 
 // get the plaintext or ciphertext file size
-        int lFileSize = (int)dPlaintextOrCiphertext.length();
+        int iFileSize = (int)dPlaintextOrCiphertext.length();
 
 // allocate storage space
-        byte[] abPlaintextOrCiphertext = new byte[lFileSize];
+        byte[] abPlaintextOrCiphertext = new byte[iFileSize];
 
         try
         {
@@ -111,7 +112,7 @@ public class RC4ED
             FileInputStream fisPlaintextCiphertext = new FileInputStream(dPlaintextOrCiphertext);
 
 // read data from the plaintext or ciphertext file
-            fisPlaintextCiphertext.read(abPlaintextOrCiphertext, 0, lFileSize);
+            fisPlaintextCiphertext.read(abPlaintextOrCiphertext, 0, iFileSize);
 
             fisPlaintextCiphertext.close();
         }
@@ -125,36 +126,29 @@ public class RC4ED
 // initialize S box
         KSA(abS, args[2].getBytes());
 
-        byte[] abKeyStream = new byte[lFileSize];
+        byte[] abKeyStream = new byte[iFileSize];
 
 // produce key stream
-        PRGA(abS, abKeyStream, lFileSize);
+        PRGA(abS, abKeyStream, iFileSize);
 
 // encrypt or decrypt by XOR
-        for(int i = 0; i < lFileSize; ++i)
+        for(int i = 0; i < iFileSize; ++i)
         {
             abPlaintextOrCiphertext[i] ^= abKeyStream[i];
         }
 
         dPlaintextOrCiphertext = new File(args[1]);
 
+        try
+        {
 // create the ciphertext or plaintext file
-        try
-        {
             dPlaintextOrCiphertext.createNewFile();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
 
-        try
-        {
 // open the ciphertext or plaintext file
             FileOutputStream fosCiphertextPlaintext = new FileOutputStream(dPlaintextOrCiphertext);
 
 // write datat to the ciphertext or plaintext file
-            fosCiphertextPlaintext.write(abPlaintextOrCiphertext, 0, lFileSize);
+            fosCiphertextPlaintext.write(abPlaintextOrCiphertext, 0, iFileSize);
 
             fosCiphertextPlaintext.close();
         }

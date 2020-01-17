@@ -49,9 +49,8 @@ Algorithm:
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
 
-// exchange data
+// swap data
 void Swap(unsigned char *pucSi, unsigned char *pucSj)
 {
     unsigned char ucTemp = *pucSi;
@@ -105,7 +104,7 @@ int main(int argc, char *argv[])
     unsigned char *pucPlaintextOrCiphertext = (unsigned char*)malloc(ulFileSize);
 
 // open the plaintext or ciphertext file
-    int iPlaintextOrCiphertextFD = open(argv[1], O_RDONLY, S_IRUSR | S_IWUSR);
+    int iPlaintextOrCiphertextFD = open(argv[1], O_BINARY | O_RDONLY, S_IREAD | S_IWRITE);
 
 // read data from the plaintext or ciphertext file
     read(iPlaintextOrCiphertextFD, pucPlaintextOrCiphertext, ulFileSize);
@@ -137,7 +136,7 @@ int main(int argc, char *argv[])
     free(pucKeyStream);
 
 // open the ciphertext or plaintext file
-    iPlaintextOrCiphertextFD = open(argv[2], O_CREAT | O_WRONLY, S_IREAD | S_IWRITE);
+    iPlaintextOrCiphertextFD = open(argv[2], O_BINARY | O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
 
 // write datat to the ciphertext or plaintext file
     write(iPlaintextOrCiphertextFD, pucPlaintextOrCiphertext, ulFileSize);

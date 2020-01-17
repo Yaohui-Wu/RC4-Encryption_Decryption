@@ -1,6 +1,6 @@
 ﻿'''
-Usage (Encryption): python RC4ED plaintext.file ciphertext.file password
-Usage (Decryption): python RC4ED ciphertext.file plaintext.file password
+Usage (Encryption): python RC4ED.py plaintext.file ciphertext.file password
+Usage (Decryption): python RC4ED.py ciphertext.file plaintext.file password
 
 Algorithm:
     S=[]
@@ -49,7 +49,7 @@ def KSA(lS,cKey):
     for i in range(256):
         j=(j+lS[i]+cKey[i%len(cKey)])%256
 
-# exchange data
+# swap data
         lS[i],lS[j]=lS[j],lS[i]
 
 # pseudo random-number generation algorithm for producing key stream
@@ -63,7 +63,7 @@ def PRGA(lS,bKeyStream,nPlaintextOrCiphertextLength):
 
         j=(j+lS[i])%256
 
-# exchange data
+# swap data
         lS[i],lS[j]=lS[j],lS[i]
 
         bKeyStream[k]=lS[(lS[i]+lS[j])%256]
