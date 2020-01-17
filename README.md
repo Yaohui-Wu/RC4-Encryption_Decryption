@@ -1,3 +1,3 @@
-* This is the source code of RC4 encryption and decryption algorithm implemented in multiple languages.
-* It includes C, Basic, Pascal, Java, Python, Perl and Ruby.
-* Compiled on MacOS, Linux, *BSD and Windows.
+* This is the source of encryption and decryption algorithm of RC4 implemented in multiple languages.
+* It includes C, Basic, Pascal, Java, Python, Perl, Ruby and PHP.
+* Compiled on MacOS, Linux, *BSD and Windows in X86_64 for C, Basic and Pascal.
