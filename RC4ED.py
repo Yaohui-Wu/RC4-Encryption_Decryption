@@ -1,4 +1,4 @@
-﻿'''
+'''
 Usage (Encryption): python RC4ED.py plaintext.file ciphertext.file password
 Usage (Decryption): python RC4ED.py ciphertext.file plaintext.file password
 
@@ -40,62 +40,57 @@ Algorithm:
 
 #-*-coding:utf-8-*-
 
-import io,sys,os.path
+import io, sys, os.path
 
 # define S box
-def KSA(lS,cKey): 
-    j=0
+def KSA(lS, cKey): 
+    j = 0
 
     for i in range(256):
-        j=(j+lS[i]+cKey[i%len(cKey)])%256
+        j = (j + lS[i] + cKey[i % len(cKey)]) % 256
 
 # swap data
-        lS[i],lS[j]=lS[j],lS[i]
+        lS[i], lS[j] = lS[j], lS[i]
 
 # pseudo random-number generation algorithm for producing key stream
-def PRGA(lS,bKeyStream,nPlaintextOrCiphertextLength):
-    i=0
+def PRGA(lS, aKeyStream, iFileSize):
+    i = j = 0
 
-    j=0
+    for k in range(iFileSize):
+        i = (i + 1) % 256
 
-    for k in range(nPlaintextOrCiphertextLength):
-        i=(i+1)%256
-
-        j=(j+lS[i])%256
+        j = (j + lS[i]) % 256
 
 # swap data
-        lS[i],lS[j]=lS[j],lS[i]
+        lS[i], lS[j] = lS[j], lS[i]
 
-        bKeyStream[k]=lS[(lS[i]+lS[j])%256]
+        aKeyStream[k] = lS[(lS[i] + lS[j]) % 256]
 
 if __name__=='__main__':
 # open the plaintext or ciphertext file
-    dPlaintextOrCiphertext=open(sys.argv[1],'br',0)
+    with open(sys.argv[1], 'br', 0) as hPlaintextOrCiphertext:
 
 # read data from the plaintext or ciphertext file
-    bPlaintextOrCiphertext=bytearray(dPlaintextOrCiphertext.readall())
+        aPlaintextOrCiphertext = bytearray(hPlaintextOrCiphertext.readall())
 
-    dPlaintextOrCiphertext.close()
+# get the size of plaintext or ciphertext file
+        iFileSize = hPlaintextOrCiphertext.tell()
 
-    lS=list(range(256))
+    lS = list(range(256))
 
 # initialize S box
-    KSA(lS,sys.argv[3].encode('ascii'))
+    KSA(lS, sys.argv[3].encode('ascii'))
 
-    iFileSize=len(bPlaintextOrCiphertext)
-
-    bKeyStream=bytearray(iFileSize)
+    aKeyStream = bytearray(iFileSize)
 
 # produce key stream
-    PRGA(lS,bKeyStream,iFileSize)
+    PRGA(lS, aKeyStream, iFileSize)
 
 # encrypt or decrypt by XOR
-    for i in range(iFileSize): bPlaintextOrCiphertext[i]^=bKeyStream[i]
+    for i in range(iFileSize): aPlaintextOrCiphertext[i] ^= aKeyStream[i]
 
 # open the ciphertext or plaintext file
-    dPlaintextOrCiphertext=open(sys.argv[2],'bw',0)
+    with open(sys.argv[2], 'bw', 0) as hCiphertextOrPlaintext:
 
 # write datat to the ciphertext or plaintext file
-    dPlaintextOrCiphertext.write(bPlaintextOrCiphertext)
-
-    dPlaintextOrCiphertext.close()
+        hCiphertextOrPlaintext.write(aPlaintextOrCiphertext)
